@@ -136,7 +136,7 @@
 							let arr = [1,3,5,7,9]
 							a = {...a.no1Data,items:0}
 							console.log(a);
-		备注2：获取数组中最后一个元素
+		备注2：如何获取数组中最后一个元素？
 							(1) ids[ids.length - 1]
 							(2) ids.reverse()[0]
 							(3) ids.slice(-1)[0]

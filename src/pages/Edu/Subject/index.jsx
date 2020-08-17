@@ -9,7 +9,7 @@ export default class Subject extends Component {
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
 		pageSize:4, //页大小
-		expandedIds:[]
+		expandedIds:[]//展开的id
 	}
 
 	componentDidMount (){
