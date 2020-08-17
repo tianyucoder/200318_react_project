@@ -12,7 +12,7 @@ export default class Subject extends Component {
 	}
 
 	componentDidMount (){
-		//初始化数据
+		//初始化一级分类数据
 		this.getNo1SubjectPaging()
 	}
 
@@ -20,7 +20,7 @@ export default class Subject extends Component {
   getNo1SubjectPaging = async (pageNumber=1,pageSize=this.state.pageSize)=>{
 		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
 		let {total,items} = result
-		//给每一个一级分类追加chidlren属性--目的是让antd产生展开按钮
+		//给每一个一级分类追加chidlren属性--目的是让antd显示展开按钮
 		items =  items.map((subject)=>{
 			subject.children = []
 			return subject
