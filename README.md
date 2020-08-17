@@ -91,6 +91,7 @@
 				(2).dataIndex所指定的属性，会作为参数传给render
 				(3).不写dataIndex，就传给render整个数据项
 		2.提示组件
+		3.131行
 
 
 
