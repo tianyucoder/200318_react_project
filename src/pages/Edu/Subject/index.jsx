@@ -3,12 +3,14 @@ import { Card,Button,Table,Tooltip} from 'antd';
 import {PlusOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
 import {reqNo1SubjectPaging,reqNo2SubjectById} from '@/api/edu/subject'
 import './index.less'
+import loading from '@/redux/reducer/loading';
 
 export default class Subject extends Component {
 
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
 		pageSize:4, //页大小
+		loading:false,//展示loading
 		expandedIds:[]//展开的id
 	}
 
@@ -19,6 +21,9 @@ export default class Subject extends Component {
 
 	//请求所以一级分类数据
   getNo1SubjectPaging = async (pageNumber=1,pageSize=this.state.pageSize)=>{
+		//展示loading
+		this.setState({loading:true})
+		//请求一级分类数据
 		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
 		let {total,items} = result
 		//给每一个一级分类追加chidlren属性--目的是让antd显示展开按钮
@@ -28,39 +33,51 @@ export default class Subject extends Component {
 		})
 		this.setState({
 			no1SubjectInfo:{total,items},//维护新的数据进状态
-			expandedIds:[] //清空之前所展开的
+			expandedIds:[], //清空之前所展开的
+			loading:false
 		})
 	}
 
 	//表格项展开+折叠的回调
 	handleExpand = async(ids)=>{
 		//获取状态中展开项id的数组
-		const {expandedIds} = this.state
+		const {expandedIds,no1SubjectInfo} = this.state
 		//如果是展开，则发请求
 		if(expandedIds.length < ids.length){
+			//当前操作项的id
 			const _id = ids.slice(-1)[0]
-			//根据一级分类id，获取当前一级分类下属的所有二级分类数据
-			const no2SubjectInfo = await reqNo2SubjectById(_id)
-			//从状态中获取一节分类
-			const {no1SubjectInfo} = this.state
-			//加工一级分类数据，找到展开的一级分类，给其children属性赋值
-			const arr = no1SubjectInfo.items.map((subject)=>{
-				if(subject._id === _id){
-					subject.children = no2SubjectInfo.items
-				}
-				return subject
-			})
-			//维护状态（好好思考这个写法）
-			this.setState({
-				no1SubjectInfo:{...no1SubjectInfo,items:arr}
-			})
+			//根据id找到当前操作的项
+			const currentSubject = no1SubjectInfo.items.find(subject => subject._id ===_id )
+			//如果当前分类没有展开过
+			if(currentSubject.children && !currentSubject.children.length){
+					this.setState({loading:true})
+					//根据一级分类id，获取当前一级分类下属的所有二级分类数据
+					const no2SubjectInfo = await reqNo2SubjectById(_id)
+					//从状态中获取一节分类
+					const {no1SubjectInfo} = this.state
+					//加工一级分类数据，找到展开的一级分类，给其children属性赋值
+					const arr = no1SubjectInfo.items.map((subject)=>{
+						if(subject._id === _id){
+							//将请求回来的二级分类数组，追加到children属性上
+							subject.children = no2SubjectInfo.items
+							//如果请求回来的二级分类数据长度为0，干掉children
+							if(!no2SubjectInfo.items.length) delete subject.children
+						}
+						return subject
+					})
+					//维护状态（好好思考这个写法）
+					this.setState({
+						no1SubjectInfo:{...no1SubjectInfo,items:arr},
+						loading:false
+					})
+			}
 		}
 		//把最新的展开项id数组，维护进状态
 		this.setState({expandedIds:ids})
 	}
 
 	render() {
-		const {no1SubjectInfo,pageSize,expandedIds} = this.state
+		const {no1SubjectInfo,pageSize,expandedIds,loading} = this.state
 		//表格中的数据源(此时是假数据，后期一定通过请求从服务器那边获取)
 		let dataSource = no1SubjectInfo.items;
 		//表格的列配置(根据设计文档写)
@@ -95,6 +112,7 @@ export default class Subject extends Component {
 		return (
 			<Card title={<Button type="primary" icon={<PlusOutlined />}>新增分类</Button>}>
 				<Table 
+					loading={loading}
 					dataSource={dataSource} //指定表格的数据
 					columns={columns} //表格列的配置
 					rowKey="_id" //指定唯一标识(默认值为key)
