@@ -22,3 +22,15 @@ export function reqNo1SubjectPaging(page,pageSize) {
     method: "GET",
   });
 }
+
+/**
+ * 根据一级分类的id查询其包含的二级分类
+ * @param {String} parentId 一级分类id
+ */
+export function reqNo2SubjectById(parentId) {
+  return request({
+		url:`${BASE_URL}/get/${parentId}`,
+    method: "GET",
+  });
+}
+

@@ -86,13 +86,16 @@
 						1.画页面，用到：Card、Table组件。
 										
 ## day02任务
+		0.关于分页：
+					真分页(后端分页):适用于数据量较大
+					假分页(前端分页)：适用于数据量不是很大
 		1.Table组件，列的配置中：render和dataIndex的配合
-				(1).同时存在渲染结果以render返回值为准
-				(2).dataIndex所指定的属性，会作为参数传给render
-				(3).不写dataIndex，就传给render整个数据项
+						(1).同时存在渲染结果以render返回值为准
+						(2).dataIndex所指定的属性，会作为参数传给render
+						(3).不写dataIndex，就传给render整个数据项
 		2.提示组件：Tooltip
 		3.可选操作：
-				修改utils/request.js 131行追加一个 return new Promise(()=>{}) 
+						修改utils/request.js 131行追加一个 return new Promise(()=>{}) 
 		4.postman测试接口
 		5.去:src/api/subject.js 中定义一个请求分页数据的接口
 		6.Subject组件中发送请求，数据维护进状态，Table组件读取并遍历
@@ -103,11 +106,16 @@
 					}}
 		8.表格某行数据的展开
 				(1).第一种展开：expandedRowRender适用于展开自身没来得及显示的属性，不适用于发请求。
-						expandedRowRender:(item)=>{
-							console.log('展开自身没展示出来',item);
-							return item.gmtCreate
-						}
+							expandedRowRender:(item)=>{
+								console.log('展开自身没展示出来',item);
+								return item.gmtCreate
+							}
 				(2).第二种展开，借助数据自身的children属性
+
+				let a = {no1Data:{total:10,items:[]}}
+			let arr = [1,3,5,7,9]
+			a = {...a.no1Data,items:0}
+			console.log(a);
 
 
 
