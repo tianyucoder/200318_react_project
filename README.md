@@ -95,12 +95,19 @@
 				修改utils/request.js 131行追加一个 return new Promise(()=>{}) 
 		4.postman测试接口
 		5.去:src/api/subject.js 中定义一个请求分页数据的接口
-		6.Subject组件中发送请求，维护状态，Table组件读取并遍历
+		6.Subject组件中发送请求，数据维护进状态，Table组件读取并遍历
 		7.Table中分页器的使用：（备注：页大小pageSize放在了state中，因为两个地方都在用）
 				pagination={{ //分页器配置
 						total:no1SubjectInfo.total, //数据总数
 						pageSize:pageSize //页大小
 					}}
+		8.表格某行数据的展开
+				(1).第一种展开：expandedRowRender适用于展开自身没来得及显示的属性，不适用于发请求。
+						expandedRowRender:(item)=>{
+							console.log('展开自身没展示出来',item);
+							return item.gmtCreate
+						}
+				(2).第二种展开，借助数据自身的children属性
 
 
 

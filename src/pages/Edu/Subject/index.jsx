@@ -8,19 +8,30 @@ export default class Subject extends Component {
 
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
-		pageSize:2 //页大小
-	}
-
-	//请求所以一级分类数据
-  getNo1SubjectPaging = async (page=1,pageSize=this.state.pageSize)=>{
-		const result = await reqNo1SubjectPaging(page,pageSize)
-		const {total,items} = result
-		this.setState({no1SubjectInfo:{total,items}})
+		pageSize:4 //页大小
 	}
 
 	componentDidMount (){
 		//初始化数据
 		this.getNo1SubjectPaging()
+	}
+
+	//请求所以一级分类数据
+  getNo1SubjectPaging = async (pageNumber=1,pageSize=this.state.pageSize)=>{
+		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
+		let {total,items} = result
+		//给每一个一级分类追加chidlren属性--目的是让antd产生展开按钮
+		items =  items.map((subject)=>{
+			subject.children = []
+			return subject
+		})
+		this.setState({no1SubjectInfo:{total,items}})
+	}
+
+	handleExpand = (expanded)=>{
+		if(expanded){
+			console.log('发请求');
+		}
 	}
 
 	render() {
@@ -62,9 +73,21 @@ export default class Subject extends Component {
 					dataSource={dataSource} //指定表格的数据
 					columns={columns} //表格列的配置
 					rowKey="_id" //指定唯一标识(默认值为key)
+					expandable={{
+						onExpand:this.handleExpand
+					}}
 					pagination={{ //分页器配置
 						total:no1SubjectInfo.total, //数据总数
-						pageSize:pageSize //页大小
+						pageSize:pageSize, //页大小
+						showSizeChanger:true,//显示页大小切换器
+						pageSizeOptions:['3','4','5','10','15'],
+						onShowSizeChange:(_,pageSize)=>{
+							this.getNo1SubjectPaging(1,pageSize)
+							this.setState({pageSize})
+						},
+						onChange:(pageNumber)=>{ //页码改变的回调
+							this.getNo1SubjectPaging(pageNumber)
+						}
 					}}
 				/>
 			</Card>
