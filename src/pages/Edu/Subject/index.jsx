@@ -64,7 +64,7 @@ export default class Subject extends Component {
 					rowKey="_id" //指定唯一标识(默认值为key)
 					pagination={{ //分页器配置
 						total:no1SubjectInfo.total, //数据总数
-						pageSize:pageSize
+						pageSize:pageSize //页大小
 					}}
 				/>
 			</Card>

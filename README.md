@@ -90,8 +90,17 @@
 				(1).同时存在渲染结果以render返回值为准
 				(2).dataIndex所指定的属性，会作为参数传给render
 				(3).不写dataIndex，就传给render整个数据项
-		2.提示组件
-		3.131行
+		2.提示组件：Tooltip
+		3.可选操作：
+				修改utils/request.js 131行追加一个 return new Promise(()=>{}) 
+		4.postman测试接口
+		5.去:src/api/subject.js 中定义一个请求分页数据的接口
+		6.Subject组件中发送请求，维护状态，Table组件读取并遍历
+		7.Table中分页器的使用：（备注：页大小pageSize放在了state中，因为两个地方都在用）
+				pagination={{ //分页器配置
+						total:no1SubjectInfo.total, //数据总数
+						pageSize:pageSize //页大小
+					}}
 
 
 
