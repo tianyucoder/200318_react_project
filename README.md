@@ -85,7 +85,12 @@
 			11.做学科管理 ==== 课程分类管理
 						1.画页面，用到：Card、Table组件。
 										
-
+## day02任务
+		1.Table组件，列的配置中：render和dataIndex的配合
+				(1).同时存在渲染结果以render返回值为准
+				(2).dataIndex所指定的属性，会作为参数传给render
+				(3).不写dataIndex，就传给render整个数据项
+		2.提示组件
 
 
 
