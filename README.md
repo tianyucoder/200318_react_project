@@ -113,14 +113,29 @@
 				(2).第二种办法：借助数据自身的children属性
 
 		9.给展开按钮加回调：
-							使用onExpand:(expanded,recod)=>{此处发送网络请求}
-							请求回来的二级分类数据，追加到对应一级分类的children属性上
+							第一种设置方式：使用onExpand
+									写法：
+											expandable={{
+												onExpand:(expanded,recod)=>{此处写业务逻辑}
+											}}
+									优势：好判断是否展开
+									劣势：无法重置展开的状态，需要很复杂的手动维护展开项id
+
+							第一种设置方式：使用expandedRowKeys
+									写法：
+											expandable={{
+												expandedRowKeys:(expandedIds)=>{此处写业务逻辑}
+											}}
+									优势：自动维护展开项id
+									劣势：需要手动判断展开还是收缩(写法不难)
+
+		10.请求回来的二级分类数据，追加到对应一级分类的children属性上
 
 		备注1，要知道这个操作：
-					let a = {no1Data:{total:10,items:[]}}
-					let arr = [1,3,5,7,9]
-					a = {...a.no1Data,items:0}
-					console.log(a);
+							let a = {no1Data:{total:10,items:[]}}
+							let arr = [1,3,5,7,9]
+							a = {...a.no1Data,items:0}
+							console.log(a);
 		备注2：获取数组中最后一个元素
 							(1) ids[ids.length - 1]
 							(2) ids.reverse()[0]
