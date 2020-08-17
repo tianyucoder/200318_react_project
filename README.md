@@ -104,22 +104,27 @@
 						total:no1SubjectInfo.total, //数据总数
 						pageSize:pageSize //页大小
 					}}
-		8.表格某行数据的展开
-				(1).第一种展开：expandedRowRender适用于展开自身没来得及显示的属性，不适用于发请求。
+		8.如何让表格的某行数据可展开
+				(1).第一种办法：expandedRowRender适用于展开自身没来得及显示的属性，不适用于发请求。
 							expandedRowRender:(item)=>{
 								console.log('展开自身没展示出来',item);
 								return item.gmtCreate
 							}
-				(2).第二种展开，借助数据自身的children属性
-		9.给展开按钮加展开回调：
+				(2).第二种办法：借助数据自身的children属性
+
+		9.给展开按钮加回调：
 							使用onExpand:(expanded,recod)=>{此处发送网络请求}
 							请求回来的二级分类数据，追加到对应一级分类的children属性上
 
-		备注，要知道这个操作：
+		备注1，要知道这个操作：
 					let a = {no1Data:{total:10,items:[]}}
 					let arr = [1,3,5,7,9]
 					a = {...a.no1Data,items:0}
 					console.log(a);
+		备注2：获取数组中最后一个元素
+							(1) ids[ids.length - 1]
+							(2) ids.reverse()[0]
+							(3) ids.slice(-1)[0]
 
 
 

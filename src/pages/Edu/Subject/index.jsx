@@ -8,7 +8,8 @@ export default class Subject extends Component {
 
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
-		pageSize:4 //页大小
+		pageSize:4, //页大小
+		expandedIds:[]
 	}
 
 	componentDidMount (){
@@ -25,11 +26,19 @@ export default class Subject extends Component {
 			subject.children = []
 			return subject
 		})
-		this.setState({no1SubjectInfo:{total,items}})
+		this.setState({
+			no1SubjectInfo:{total,items},//维护新的数据进状态
+			expandedIds:[] //清空之前所展开的
+		})
 	}
 
-	handleExpand = async(expanded,{_id})=>{
-		if(expanded){
+	//表格项展开+折叠的回调
+	handleExpand = async(ids)=>{
+		//获取状态中展开项id的数组
+		const {expandedIds} = this.state
+		//如果是展开，则发请求
+		if(expandedIds.length < ids.length){
+			const _id = ids.slice(-1)[0]
 			//根据一级分类id，获取当前一级分类下属的所有二级分类数据
 			const no2SubjectInfo = await reqNo2SubjectById(_id)
 			//从状态中获取一节分类
@@ -42,12 +51,16 @@ export default class Subject extends Component {
 				return subject
 			})
 			//维护状态（好好思考这个写法）
-			this.setState({no1SubjectInfo:{...no1SubjectInfo,items:arr}})
+			this.setState({
+				no1SubjectInfo:{...no1SubjectInfo,items:arr}
+			})
 		}
+		//把最新的展开项id数组，维护进状态
+		this.setState({expandedIds:ids})
 	}
 
 	render() {
-		const {no1SubjectInfo,pageSize} = this.state
+		const {no1SubjectInfo,pageSize,expandedIds} = this.state
 		//表格中的数据源(此时是假数据，后期一定通过请求从服务器那边获取)
 		let dataSource = no1SubjectInfo.items;
 		//表格的列配置(根据设计文档写)
@@ -86,7 +99,9 @@ export default class Subject extends Component {
 					columns={columns} //表格列的配置
 					rowKey="_id" //指定唯一标识(默认值为key)
 					expandable={{
-						onExpand:this.handleExpand //展开某一分类的回调
+						//onExpand:this.handleExpand ,//指定展开的回调
+						onExpandedRowsChange:this.handleExpand,//指定展开的回调
+						expandedRowKeys:expandedIds //展开哪些项(项id组成的数组)
 					}}
 					pagination={{ //分页器配置
 						total:no1SubjectInfo.total, //数据总数
