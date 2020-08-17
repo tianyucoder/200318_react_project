@@ -41,7 +41,7 @@ export default class Subject extends Component {
 				}
 				return subject
 			})
-			//维护状态（好好思考）
+			//维护状态（好好思考这个写法）
 			this.setState({no1SubjectInfo:{...no1SubjectInfo,items:arr}})
 		}
 	}
