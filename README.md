@@ -111,11 +111,16 @@
 								return item.gmtCreate
 							}
 				(2).第二种展开，借助数据自身的children属性
+		9.给展开按钮加展开回调：
+							使用onExpand:(expanded,recod)=>{此处发送网络请求}
+							请求回来的二级分类数据，追加到对应一级分类的children属性上
 
-				let a = {no1Data:{total:10,items:[]}}
-			let arr = [1,3,5,7,9]
-			a = {...a.no1Data,items:0}
-			console.log(a);
+		备注，要知道这个操作：
+					let a = {no1Data:{total:10,items:[]}}
+					let arr = [1,3,5,7,9]
+					a = {...a.no1Data,items:0}
+					console.log(a);
+
 
 
 
