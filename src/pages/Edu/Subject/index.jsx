@@ -21,7 +21,7 @@ export default class Subject extends Component {
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
 		pageSize:4, //页大小
-		pageNumber:1,//初始页码
+		pageNumber:1,//页码
 		loading:false,//展示loading
 		expandedIds:[],//展开的id
 		editId:'',//当前正在编辑分类的id
@@ -132,8 +132,10 @@ export default class Subject extends Component {
 			okText:'确认',
 			cancelText:'取消',
 			onOk:async()=> { //弹窗中确认按钮的回调
+				//请求删除分类
 				await reqDeleteSubject(subject._id)
-				this.getNo1SubjectPaging(	
+				this.getNo1SubjectPaging(
+					//如果不是第一页，且列表中只有一条数据了，那么就请求前一页的数据	
 					pageNumber>1 && no1SubjectInfo.items.length === 1 ? 
 					pageNumber-1 : 
 					pageNumber ,pageSize
@@ -219,7 +221,7 @@ export default class Subject extends Component {
 						pageSize:pageSize, //页大小
 						showSizeChanger:true,//显示页大小切换器
 						pageSizeOptions:['3','4','5','10','15'],
-						current:pageNumber,
+						current:pageNumber,//当前页码
 						onShowSizeChange:(_,pageSize)=>{ //页大小改变的回调
 							this.getNo1SubjectPaging(1,pageSize)
 						},

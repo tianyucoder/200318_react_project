@@ -147,3 +147,39 @@
 
 
 
+
+## day03任务：
+		1.编辑分类
+				(1).在Tbale组件的列配置中，render与dataIndex的配合,获取当前分类信息
+				(2).点击编辑将当前分类信息(_id,title)存入自身state---受控组件
+				(3).Table组件中render属性中加判断，匹配状态中id，展示不同的内容
+				(4).编写API请求更新分类信息
+				(5).更新后，不要刷新当前页面，而是自己遍历更新数据(体验好)，用到了一个递归查找：
+					//封装更新数据的方法
+					const handleData = arr =>{
+						return arr.map((subject)=>{
+							if(subject._id === editId){
+								subject.title = editTitle
+							}else{
+								//如果某一级分类有children，继续去children里找
+								if(subject.children) handleData(subject.children)
+							}
+							return subject
+						})
+					}
+		2.删除分类
+				(1).用到了Modal.confirm组件
+						confirm({
+								title:'xxxxx, //主标题
+								icon: <QuestionCircleOutlined />,//图标
+								content: '删除后无法恢复，请谨慎操作！',//副标题
+								okText:'确认',
+								cancelText:'取消',
+								onOk:async()=> {} //弹窗中确认按钮的回调
+								onCancel() {} //弹窗中取消按钮的回调
+							});
+				(2).执行删除
+								(1).删除后重新请求当前页的最新数据
+								(2).注意分页器中current属性的使用————用来指定当前页码
+								(3).每次点击页码按钮后，将当前页码维护进状态
+								(4).若当前不是第一页，且只有一条数据，删除后要请求前一页数据
