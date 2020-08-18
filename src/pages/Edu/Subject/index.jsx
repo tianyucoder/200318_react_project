@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
-import { Card,Button,Table,Tooltip,Input} from 'antd';
+import { Card,Button,Table,Tooltip,Input, message} from 'antd';
 import {PlusOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
-import {reqNo1SubjectPaging,reqNo2SubjectById} from '@/api/edu/subject'
+import {
+	reqNo1SubjectPaging,
+	reqNo2SubjectById,
+	reqUpdateSubject
+} from '@/api/edu/subject'
 import './index.less'
 
 export default class Subject extends Component {
-
+	subjectRef = React.createRef()
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
 		pageSize:4, //页大小
 		loading:false,//展示loading
 		expandedIds:[],//展开的id
 		editId:'',//当前正在编辑分类的id
-		// editTitle:'',//当前正在编辑分类的title
+		editTitle:'',//当前正在编辑分类的title
 	}
 
 	componentDidMount (){
@@ -77,15 +81,39 @@ export default class Subject extends Component {
 		this.setState({expandedIds:ids})
 	}
 
-	//点击编辑按钮的回调
-	handleEdit = ({_id})=>{
-		this.setState({editId:_id})
+	updateSubject = async()=>{
+		const {editId,editTitle,no1SubjectInfo} = this.state
+		//1.获取当前编辑项的id + 用户的输入
+		if(!editTitle.trim()){
+			message.error('分类名不能为空',0.5)
+			return
+		}
+		//2.发请求去更新
+		await reqUpdateSubject(editId,editTitle)
+		//3.手动维护本地状态
+		const updatedSubject1Arr =  no1SubjectInfo.items.map(subject1 => {
+			if(subject1._id === editId){
+				subject1.title = editTitle
+			}else{
+				if(subject1.children){
+					subject1.children = subject1.children.map(subject2 => {
+						if(subject2._id === editId){
+							subject2.title = editTitle
+						}
+						return subject2
+					})
+				}
+			}
+			return subject1
+		})
+		//4.维护状态
+		this.setState({
+			no1SubjectInfo:{...no1SubjectInfo,items:updatedSubject1Arr},
+			editId:'',
+			editTitle:''
+		})
 	}
 
-	//编辑时点击取消按钮的回调
-	handleCancel = ()=>{
-		this.setState({editId:''})
-	}
 
 	render() {
 		const {no1SubjectInfo,pageSize,expandedIds,loading,editId} = this.state
@@ -98,7 +126,12 @@ export default class Subject extends Component {
 				//dataIndex: 'title', //数据索引项——决定该列展示啥
 				key: 'title',
 				render:(item)=> item._id === editId ? 
-					<Input defaultValue={item.title} className="edit_input" type="text"/> : 
+					<Input 
+						defaultValue={item.title} 
+						onChange={event => this.setState({editTitle:event.target.value})}
+						className="edit_input" 
+						type="text"
+					/> : 
 					item.title
 			},
 			{
@@ -107,15 +140,28 @@ export default class Subject extends Component {
 				//dataIndex:'_id', //数据索引项——决定该列展示啥
 				align:'center',
 				key: 'caozuo',
-				render:(item)=>( //render返回啥，该列就展示啥
-					item._id === editId ?
+				render:(subject)=>( //render返回啥，该列就展示啥
+					subject._id === editId ?
 						<>
-							<Button size="small" className="left_btn" type="primary">确定</Button>
-							<Button size="small" onClick={this.handleCancel}>取消</Button>
+							<Button 
+								size="small" 
+								className="left_btn" 
+								type="primary"
+								onClick={this.updateSubject}
+							>确定</Button>
+							<Button 
+								size="small" 
+								onClick={()=>this.setState({editId:'',editTitle:''})}
+							>取消</Button>
 						</>:
 						<>
 							<Tooltip placement="top" title="编辑分类">
-								<Button onClick={()=>this.handleEdit(item)} type="primary" className="left_btn" icon={<FormOutlined/>}/>
+								<Button 
+									onClick={()=>this.setState({editId:subject._id,editTitle:subject.title,})} 
+									type="primary" 
+									className="left_btn" 
+									icon={<FormOutlined/>}
+								/>
 							</Tooltip>
 							<Tooltip placement="top" title="删除分类">
 								<Button type="danger" icon={<DeleteOutlined/>}/>

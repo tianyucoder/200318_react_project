@@ -34,3 +34,16 @@ export function reqNo2SubjectById(parentId) {
   });
 }
 
+/**
+ * 根据分类的id更新分类的名字
+ * @param {*} id 分类id
+ * @param {*} title 分类名
+ */
+export function reqUpdateSubject(id,title) {
+  return request({
+		url:`${BASE_URL}/update`,
+		data:{id,title},
+    method: "PUT",
+  });
+}
+
