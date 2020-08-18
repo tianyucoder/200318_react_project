@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
-import { Card,Button,Table,Tooltip,Input, message} from 'antd';
-import {PlusOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
+import { Card,Button,Table,Tooltip,Input, message,Modal} from 'antd';
+import {
+	PlusOutlined,
+	FormOutlined,
+	DeleteOutlined,
+	QuestionCircleOutlined
+} from '@ant-design/icons'
 import {
 	reqNo1SubjectPaging,
 	reqNo2SubjectById,
-	reqUpdateSubject
+	reqUpdateSubject,
+	reqDeleteSubject
 } from '@/api/edu/subject'
 import './index.less'
+//从Modal引入confirm
+const {confirm} = Modal
 
 export default class Subject extends Component {
 	subjectRef = React.createRef()
@@ -84,6 +92,18 @@ export default class Subject extends Component {
 	//更新分类-确定按钮的回调
 	updateSubject = async()=>{
 		const {editId,editTitle,no1SubjectInfo} = this.state
+		//封装更新数据的方法
+		const handleData = arr =>{
+			return arr.map((subject)=>{
+				if(subject._id === editId){
+					subject.title = editTitle
+				}else{
+					//如果某一级分类有children，继续去children里找
+					if(subject.children) handleData(subject.children)
+				}
+				return subject
+			})
+		}
 		//1.获取当前编辑项的id + 用户的输入
 		if(!editTitle.trim()){
 			message.error('分类名不能为空',0.5)
@@ -92,27 +112,32 @@ export default class Subject extends Component {
 		//2.发请求去更新
 		await reqUpdateSubject(editId,editTitle)
 		//3.手动维护本地状态
-		const updatedSubject1Arr =  no1SubjectInfo.items.map(subject1 => {
-			if(subject1._id === editId){
-				subject1.title = editTitle
-			}else{
-				if(subject1.children){
-					subject1.children = subject1.children.map(subject2 => {
-						if(subject2._id === editId){
-							subject2.title = editTitle
-						}
-						return subject2
-					})
-				}
-			}
-			return subject1
-		})
+		const updatedSubject1Arr = handleData(no1SubjectInfo.items)
 		//4.维护状态
 		this.setState({
 			no1SubjectInfo:{...no1SubjectInfo,items:updatedSubject1Arr},//更新分类信息
 			editId:'', //清空编辑的id
 			editTitle:''//清空编辑的title
 		})
+	}
+
+	//点击删除按钮的回调
+	handleDelete = (subject)=>{
+		confirm({
+		  title: <h4>确认删除<span className="alert_info">{subject.title}</span>吗?</h4>, //主标题
+			icon: <QuestionCircleOutlined />,//图标
+			content: '删除后无法恢复，请谨慎操作！',//副标题
+			okText:'确认',
+			cancelText:'取消',
+			onOk:async()=> { //弹窗中确认按钮的回调
+				console.log('发请求删除数据');
+				await reqDeleteSubject(subject._id)
+				this.getNo1SubjectPaging(1,this.state.pageSize)
+			},
+			/* onCancel() { //弹窗中取消按钮的回调
+				console.log('你点了取消');
+			}, */
+		});
 	}
 
 
@@ -165,7 +190,7 @@ export default class Subject extends Component {
 								/>
 							</Tooltip>
 							<Tooltip placement="top" title="删除分类">
-								<Button type="danger" icon={<DeleteOutlined/>}/>
+								<Button onClick={()=>this.handleDelete(subject)} type="danger" icon={<DeleteOutlined/>}/>
 							</Tooltip>
 						</>
 				) 
