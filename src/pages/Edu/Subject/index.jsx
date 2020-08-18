@@ -81,6 +81,7 @@ export default class Subject extends Component {
 		this.setState({expandedIds:ids})
 	}
 
+	//更新分类-确定按钮的回调
 	updateSubject = async()=>{
 		const {editId,editTitle,no1SubjectInfo} = this.state
 		//1.获取当前编辑项的id + 用户的输入
@@ -108,9 +109,9 @@ export default class Subject extends Component {
 		})
 		//4.维护状态
 		this.setState({
-			no1SubjectInfo:{...no1SubjectInfo,items:updatedSubject1Arr},
-			editId:'',
-			editTitle:''
+			no1SubjectInfo:{...no1SubjectInfo,items:updatedSubject1Arr},//更新分类信息
+			editId:'', //清空编辑的id
+			editTitle:''//清空编辑的title
 		})
 	}
 
