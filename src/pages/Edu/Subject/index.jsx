@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Card,Button,Table,Tooltip} from 'antd';
+import { Card,Button,Table,Tooltip,Input} from 'antd';
 import {PlusOutlined,FormOutlined,DeleteOutlined} from '@ant-design/icons'
 import {reqNo1SubjectPaging,reqNo2SubjectById} from '@/api/edu/subject'
 import './index.less'
-import loading from '@/redux/reducer/loading';
 
 export default class Subject extends Component {
 
@@ -11,7 +10,9 @@ export default class Subject extends Component {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
 		pageSize:4, //页大小
 		loading:false,//展示loading
-		expandedIds:[]//展开的id
+		expandedIds:[],//展开的id
+		editId:'',//当前正在编辑分类的id
+		// editTitle:'',//当前正在编辑分类的title
 	}
 
 	componentDidMount (){
@@ -76,31 +77,45 @@ export default class Subject extends Component {
 		this.setState({expandedIds:ids})
 	}
 
+	//点击编辑按钮的回调
+	handleEdit = ({_id})=>{
+		this.setState({editId:_id})
+	}
+
+	//编辑时点击取消按钮的回调
+	handleCancel = ()=>{
+		this.setState({editId:''})
+	}
+
 	render() {
-		const {no1SubjectInfo,pageSize,expandedIds,loading} = this.state
+		const {no1SubjectInfo,pageSize,expandedIds,loading,editId} = this.state
 		//表格中的数据源(此时是假数据，后期一定通过请求从服务器那边获取)
 		let dataSource = no1SubjectInfo.items;
 		//表格的列配置(根据设计文档写)
 		const columns = [
 			{
 				title: '分类名', //决定该列的名字
-				dataIndex: 'title', //数据索引项——决定该列展示啥
+				//dataIndex: 'title', //数据索引项——决定该列展示啥
 				key: 'title',
-				/* render:(name)=>{
-					console.log(name);
-					return '￥'+name
-				} */
+				render:(item)=> item._id === editId ? 
+								<Input defaultValue={item.title} className="edit_input" type="text"/> : 
+								item.title
 			},
 			{
 				title: '操作',
 				width:"200px",
-				dataIndex:'caozuo', //数据索引项——决定该列展示啥
+				//dataIndex:'_id', //数据索引项——决定该列展示啥
 				align:'center',
 				key: 'caozuo',
-				render:()=>( //render返回啥，该列就展示啥
+				render:(item)=>( //render返回啥，该列就展示啥
+					item._id === editId ?
+					<>
+						<Button size="small" className="left_btn" type="primary">确定</Button>
+						<Button size="small" onClick={this.handleCancel}>取消</Button>
+					</>:
 					<>
 						<Tooltip placement="top" title="编辑分类">
-							<Button type="primary" className="left_btn" icon={<FormOutlined/>}/>
+							<Button onClick={()=>this.handleEdit(item)} type="primary" className="left_btn" icon={<FormOutlined/>}/>
 						</Tooltip>
 						<Tooltip placement="top" title="删除分类">
 							<Button type="danger" icon={<DeleteOutlined/>}/>
