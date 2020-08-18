@@ -98,8 +98,8 @@ export default class Subject extends Component {
 				//dataIndex: 'title', //数据索引项——决定该列展示啥
 				key: 'title',
 				render:(item)=> item._id === editId ? 
-								<Input defaultValue={item.title} className="edit_input" type="text"/> : 
-								item.title
+					<Input defaultValue={item.title} className="edit_input" type="text"/> : 
+					item.title
 			},
 			{
 				title: '操作',
@@ -109,18 +109,18 @@ export default class Subject extends Component {
 				key: 'caozuo',
 				render:(item)=>( //render返回啥，该列就展示啥
 					item._id === editId ?
-					<>
-						<Button size="small" className="left_btn" type="primary">确定</Button>
-						<Button size="small" onClick={this.handleCancel}>取消</Button>
-					</>:
-					<>
-						<Tooltip placement="top" title="编辑分类">
-							<Button onClick={()=>this.handleEdit(item)} type="primary" className="left_btn" icon={<FormOutlined/>}/>
-						</Tooltip>
-						<Tooltip placement="top" title="删除分类">
-							<Button type="danger" icon={<DeleteOutlined/>}/>
-						</Tooltip>
-					</>
+						<>
+							<Button size="small" className="left_btn" type="primary">确定</Button>
+							<Button size="small" onClick={this.handleCancel}>取消</Button>
+						</>:
+						<>
+							<Tooltip placement="top" title="编辑分类">
+								<Button onClick={()=>this.handleEdit(item)} type="primary" className="left_btn" icon={<FormOutlined/>}/>
+							</Tooltip>
+							<Tooltip placement="top" title="删除分类">
+								<Button type="danger" icon={<DeleteOutlined/>}/>
+							</Tooltip>
+						</>
 				) 
 			},
 		];
