@@ -205,7 +205,17 @@ export default class Subject extends Component {
 			},
 		];
 		return (
-			<Card title={<Button type="primary" icon={<PlusOutlined />}>新增分类</Button>}>
+			<Card 
+				title={
+					<Button 
+						onClick={()=>this.props.history.push('/edu/subject/add')} 
+						type="primary" 
+						icon={<PlusOutlined />}
+					>
+						新增分类
+					</Button>
+				}
+			>
 				<Table 
 					loading={loading}
 					dataSource={dataSource} //指定表格的数据
