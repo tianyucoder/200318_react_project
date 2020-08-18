@@ -21,6 +21,7 @@ export default class Subject extends Component {
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
 		pageSize:4, //页大小
+		pageNumber:1,//初始页码
 		loading:false,//展示loading
 		expandedIds:[],//展开的id
 		editId:'',//当前正在编辑分类的id
@@ -35,7 +36,7 @@ export default class Subject extends Component {
 	//请求所以一级分类数据
   getNo1SubjectPaging = async (pageNumber=1,pageSize=this.state.pageSize)=>{
 		//展示loading
-		this.setState({loading:true})
+		this.setState({loading:true,pageSize,pageNumber})
 		//请求一级分类数据
 		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
 		let {total,items} = result
@@ -123,6 +124,7 @@ export default class Subject extends Component {
 
 	//点击删除按钮的回调
 	handleDelete = (subject)=>{
+		const {pageNumber,pageSize,no1SubjectInfo} = this.state
 		confirm({
 		  title: <h4>确认删除<span className="alert_info">{subject.title}</span>吗?</h4>, //主标题
 			icon: <QuestionCircleOutlined />,//图标
@@ -130,9 +132,13 @@ export default class Subject extends Component {
 			okText:'确认',
 			cancelText:'取消',
 			onOk:async()=> { //弹窗中确认按钮的回调
-				console.log('发请求删除数据');
 				await reqDeleteSubject(subject._id)
-				this.getNo1SubjectPaging(1,this.state.pageSize)
+				this.getNo1SubjectPaging(	
+					pageNumber>1 && no1SubjectInfo.items.length === 1 ? 
+					pageNumber-1 : 
+					pageNumber ,pageSize
+				)
+				if(no1SubjectInfo.items.length === 1) this.setState({pageNumber:pageNumber-1})
 			},
 			/* onCancel() { //弹窗中取消按钮的回调
 				console.log('你点了取消');
@@ -142,7 +148,7 @@ export default class Subject extends Component {
 
 
 	render() {
-		const {no1SubjectInfo,pageSize,expandedIds,loading,editId} = this.state
+		const {no1SubjectInfo,pageSize,pageNumber,expandedIds,loading,editId} = this.state
 		//表格中的数据源(此时是假数据，后期一定通过请求从服务器那边获取)
 		let dataSource = no1SubjectInfo.items;
 		//表格的列配置(根据设计文档写)
@@ -213,9 +219,9 @@ export default class Subject extends Component {
 						pageSize:pageSize, //页大小
 						showSizeChanger:true,//显示页大小切换器
 						pageSizeOptions:['3','4','5','10','15'],
+						current:pageNumber,
 						onShowSizeChange:(_,pageSize)=>{ //页大小改变的回调
 							this.getNo1SubjectPaging(1,pageSize)
-							this.setState({pageSize})
 						},
 						onChange:(pageNumber)=>{ //页码改变的回调
 							this.getNo1SubjectPaging(pageNumber)
