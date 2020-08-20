@@ -1,6 +1,7 @@
 import {combineReducers} from "redux";
 import loading from "./loading";
 import token from "./login";
+import language from './language'
 import {user} from "@/components/Authorized/redux";
 import {userList} from "@/pages/Acl/User/redux";
 import {roleList} from "@/pages/Acl/Role/redux";
@@ -16,5 +17,6 @@ export default combineReducers({
   roleList,
 	menuList,
 	chapterInfo,
-	subjectInfo
+	subjectInfo,
+	language
 });

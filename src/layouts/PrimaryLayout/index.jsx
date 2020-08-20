@@ -13,6 +13,7 @@ import { Link, withRouter } from "react-router-dom";
 import SiderMenu from "../SiderMenu";
 import { AuthorizedRouter } from "@/components/Authorized";
 import { logout } from "@/redux/actions/login";
+import { changeLanguage } from "@/redux/actions/language";
 import { resetUser } from "../../components/Authorized/redux";
 import logo from "@/assets/images/logo.png";
 import { findPathIndex } from "@/utils/tools";
@@ -20,6 +21,7 @@ import "@/assets/css/common.less";// 引入组件公共样式
 import "./index.less";
 
 const { Header, Sider, Content } = Layout;
+const {Item} = Menu
 
 @connect(
   (state) => ({
@@ -28,6 +30,7 @@ const { Header, Sider, Content } = Layout;
   {
     logout,
 		resetUser,
+		changeLanguage
   }
 )
 @withRouter
@@ -73,18 +76,22 @@ class PrimaryLayout extends Component {
       </Menu.Item>
     </Menu>
 	);
+
+	changeLan = ({key})=>{
+		this.props.changeLanguage(key)
+	}
 	
 	languageMenu = (
-    <Menu style={{ width: 100 }}>
-      <Menu.Item key="zh_CN">
+    <Menu style={{ width: 100 }} onClick={this.changeLan}>
+      <Item key="zh_CN">
 				简体中文
-      </Menu.Item>
-      <Menu.Item key="zh_TW">
+      </Item>
+      <Item key="zh_TW">
 				繁體中文
-      </Menu.Item>
-      <Menu.Item key="en">
+      </Item>
+      <Item key="en">
         English
-      </Menu.Item>
+      </Item>
     </Menu>
   );
 

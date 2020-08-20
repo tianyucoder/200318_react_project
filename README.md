@@ -266,4 +266,12 @@
 							<App/>
 						</IntlProvider>
 					</ConfigProvider>
-			
+
+	5.分析项目中的redux结构，并自己编写一个，将subject信息存入redux
+
+	6.实现右上角语言切换
+				(1).确定组件位置：src/layouts/PrimaryLayout
+				(2).找到下拉菜单的位置
+				(3).给下拉菜单指定点击回调
+				(4).点击回调中：a.获取用户选择的语言；b.将用户所选语言维护到redux
+				(5).讲所有引入语言包、指定语言包的代码从index.js中移植到App.js
