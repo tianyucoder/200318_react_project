@@ -12,6 +12,7 @@ import {
 	reqUpdateSubject,
 	reqDeleteSubject
 } from '@/api/edu/subject'
+import {FormattedMessage} from 'react-intl'
 import './index.less'
 //从Modal引入confirm
 const {confirm} = Modal
@@ -156,7 +157,7 @@ export default class Subject extends Component {
 		//表格的列配置(根据设计文档写)
 		const columns = [
 			{
-				title: '分类名', //决定该列的名字
+				title: <FormattedMessage id="subject_name"/>, //决定该列的名字
 				//dataIndex: 'title', //数据索引项——决定该列展示啥
 				key: 'title',
 				render:(item)=> item._id === editId ? 
@@ -169,7 +170,7 @@ export default class Subject extends Component {
 					item.title
 			},
 			{
-				title: '操作',
+				title: <FormattedMessage id="operation"/>,
 				width:"200px",
 				//dataIndex:'_id', //数据索引项——决定该列展示啥
 				align:'center',
@@ -189,7 +190,7 @@ export default class Subject extends Component {
 							>取消</Button>
 						</>:
 						<>
-							<Tooltip placement="top" title="编辑分类">
+							<Tooltip placement="top" title={<FormattedMessage id="edit_subject"/>}>
 								<Button 
 									onClick={()=>this.setState({editId:subject._id,editTitle:subject.title,})} 
 									type="primary" 
@@ -197,7 +198,7 @@ export default class Subject extends Component {
 									icon={<FormOutlined/>}
 								/>
 							</Tooltip>
-							<Tooltip placement="top" title="删除分类">
+							<Tooltip placement="top" title={<FormattedMessage id="delete_subject"/>}>
 								<Button onClick={()=>this.handleDelete(subject)} type="danger" icon={<DeleteOutlined/>}/>
 							</Tooltip>
 						</>
@@ -212,7 +213,7 @@ export default class Subject extends Component {
 						type="primary" 
 						icon={<PlusOutlined />}
 					>
-						新增分类
+						<FormattedMessage id="add_subject"/>
 					</Button>
 				}
 			>

@@ -228,3 +228,25 @@
 			4.国际化的两种级别？
 					1.应用骨架的国际化
 					2.应用数据的国际化	
+
+	3.实现react项目的国际化
+			(1).定义语言包，并编写内容：
+							src/locales/zh_CN.json
+							src/locales/zh_TW.json
+							src/locales/en.json
+							src/locales/index.js =====> 汇总所有的语言包，随后暴露
+			(2).安装依赖包：yarn add react-intl
+			(3).打开src/index.js
+							引入：import {IntlProvider} from 'react-intl'
+							引入：import language from './locales'
+							用IntlProvider包裹App组件，且传入所有语言：
+											<IntlProvider messages={language.zh_CN}>
+												<App/>
+											</IntlProvider>
+
+			(4).在需要做国际化的组件当中--第一种实现方式：
+							(1).引入：
+										import {FormattedMessage} from 'react-intl'
+							(2).在用到文字的地方：
+										<FormattedMessage id="add_subject"/>
+			
