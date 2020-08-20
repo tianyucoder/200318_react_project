@@ -13,11 +13,13 @@ import {
 	reqDeleteSubject
 } from '@/api/edu/subject'
 import {FormattedMessage} from 'react-intl'
+import {connect} from 'react-redux'
+import {saveSubjectInfo} from './redux'
 import './index.less'
 //从Modal引入confirm
 const {confirm} = Modal
 
-export default class Subject extends Component {
+class Subject extends Component {
 	subjectRef = React.createRef()
 	state = {
 		no1SubjectInfo:{total:0,items:[]}, //一级分类数据
@@ -40,6 +42,7 @@ export default class Subject extends Component {
 		this.setState({loading:true,pageSize,pageNumber,editId:'',editTitle:''})
 		//请求一级分类数据
 		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
+		this.props.saveSubjectInfo(result)
 		let {total,items} = result
 		//给每一个一级分类追加chidlren属性--目的是让antd显示展开按钮
 		items =  items.map((subject)=>{
@@ -245,3 +248,7 @@ export default class Subject extends Component {
 		)
 	}
 }
+export default connect(
+	(state)=>({}),
+	{saveSubjectInfo}
+)(Subject)

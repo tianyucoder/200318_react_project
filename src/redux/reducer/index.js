@@ -6,13 +6,15 @@ import {userList} from "@/pages/Acl/User/redux";
 import {roleList} from "@/pages/Acl/Role/redux";
 import {menuList} from "@/pages/Acl/Permission/redux";
 import {chapterInfo} from '@/pages/Edu/Chapter/redux'
+import {subjectInfo} from '@/pages/Edu/Subject/redux'
 
 export default combineReducers({
   loading,
   user,
-  token,
+	token,
   userList,
   roleList,
 	menuList,
-	chapterInfo
+	chapterInfo,
+	subjectInfo
 });
