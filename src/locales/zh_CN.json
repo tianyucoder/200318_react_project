@@ -3,5 +3,10 @@
 	"subject_name":"分类名",
 	"operation":"操作",
 	"edit_subject":"编辑分类",
-	"delete_subject":"删除分类"
+	"delete_subject":"删除分类",
+	"parent_id":"所属父级分类",
+	"hint_subject_name":"请输入分类名",
+	"hint_parent_id":"请选择父级分类",
+	"ok_btn":"确认",
+	"test":"我是一些测试文字{name},{age}"
 }

@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import {Card,Button,Form,Input,Select} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
 import {reqNo1SubjectPaging,reqAddSubject} from '@/api/edu/subject'
+import {FormattedMessage,injectIntl} from 'react-intl'
 import './index.less'
 
 const {Item} = Form
 const {Option} = Select
 
-export default class AddSubject extends Component {
+@injectIntl
+class AddSubject extends Component {
 
 	state = {
 		no1SubjectInfo:{total:0,items:[]},
@@ -45,13 +47,16 @@ export default class AddSubject extends Component {
 	}
 
 	render() {
+		console.log(this.props);
 		const {no1SubjectInfo} = this.state
 		return (
 			<Card 
 				title={
 					<>
 						<Button onClick={this.props.history.goBack} type="link" icon={<ArrowLeftOutlined/>}/>
-						<span>添加分类</span>
+						<span>
+							<FormattedMessage id="add_subject"/>
+						</span>
 					</>
 				}
 			>
@@ -62,7 +67,7 @@ export default class AddSubject extends Component {
 					initialValues={{parentId:'',}}//设置一些表单项的初始值
 				>
 					<Item 
-						label="分类名" //左侧文字
+						label={<FormattedMessage id="subject_name"/>} //左侧文字
 						/* 
 							Item中name属性的作用：
 									1.作为antd收集表数数据时，数据对象的key
@@ -73,10 +78,10 @@ export default class AddSubject extends Component {
 							{required:true,message:'抱歉，分类名必须填写！'},
 						]}
 					>
-						<Input placeholder="请求输入分类名"/>
+						<Input placeholder={this.props.intl.formatMessage({id:'hint_subject_name'})}/>
 					</Item>
 					<Item 
-						label="所属父级分类"
+						label={<FormattedMessage id="parent_id"/>}
 						name="parentId"
 						rules={[
 							{required:true,message:'抱歉，必须选择一个所属分类！'},
@@ -101,7 +106,7 @@ export default class AddSubject extends Component {
 								)
 							}}
 						>
-							<Option key="0" value="" >请选择父级分类</Option>
+							<Option key="0" value="" ><FormattedMessage id="hint_parent_id"/></Option>
 							<Option key="1" value="0" ><span className="no1title">一级分类</span></Option>
 							{
 								no1SubjectInfo.items.map(subject =>
@@ -113,10 +118,22 @@ export default class AddSubject extends Component {
 						</Select>
 					</Item>
 					<Item  wrapperCol={{offset:3}}>
-						<Button type="primary" htmlType="submit">确认</Button>
+						<Button type="primary" htmlType="submit">
+							<FormattedMessage id="ok_btn"/>
+						</Button>
 					</Item>
 				</Form>
+				
+				{/* 传参 */}
+				<FormattedMessage id="test" values={{name:'tom',age:19}}/>
+				{/* 指定渲染的标签名，而且是可以传第三方组件的 */}
+				<FormattedMessage id="ok_btn" tagName={Button}/>
+				{/* 用回调函数自定义结构 */}
+				<FormattedMessage id="ok_btn">
+						{data => <Button type="danger">{data[0]}</Button>}
+				</FormattedMessage>
 			</Card>
 		)
 	}
 }
+export default AddSubject

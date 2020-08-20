@@ -3,5 +3,10 @@
 	"subject_name":"subject name",
 	"operation":"operation",
 	"edit_subject":"edit subject",
-	"delete_subject":"delete subject"
+	"delete_subject":"delete subject",
+	"parent_id":"parent subject",
+	"hint_subject_name":"please input subject name",
+	"hint_parent_id":"please check parent subject",
+	"ok_btn":"ok",
+	"test":"this is some demo text{name},{age}"
 }

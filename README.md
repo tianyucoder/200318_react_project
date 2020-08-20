@@ -220,7 +220,7 @@
 
 	2.应用国际化：
 			1.什么是国际化？
-					统一个网站，但可以根据用户的选择，进行语言的切换
+					同一个网站，但可以根据用户的选择，进行语言的切换。
 			2.什么系统考虑做国际化？
 					后台管理系统，电商系统
 			3.国际化是实时翻译吗？
@@ -244,9 +244,15 @@
 												<App/>
 											</IntlProvider>
 
-			(4).在需要做国际化的组件当中--第一种实现方式：
+			(4).在需要做国际化的组件当中【第一种实现方式】(推荐)：
 							(1).引入：
 										import {FormattedMessage} from 'react-intl'
 							(2).在用到文字的地方：
 										<FormattedMessage id="add_subject"/>
-			
+
+			(5).在需要做国际化的组件当中【第二种实现方式】(兼容性好)：
+							(1).引入：
+										import {injectIntl} from 'react-intl'	
+							(2).用injectIntl加工原组件，随后将加工的结果暴露出去=====>可以考虑用装饰器
+							(2).在用到文字的地方：
+										this.props.intl.formatMessage({id:'xxxxx'})

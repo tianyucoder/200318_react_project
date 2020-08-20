@@ -3,5 +3,10 @@
 	"subject_name":"分類名",
 	"operation":"蓸作",
 	"edit_subject":"編輯分類",
-	"delete_subject":"刪除分類"
+	"delete_subject":"刪除分類",
+	"parent_id":"所屬父級分類",
+	"hint_subject_name":"請輸入分類名",
+	"hint_parent_id":"請選擇父級分類",
+	"ok_btn":"確認",
+	"test":"我是一些測試文字{name},{age}"
 }
