@@ -130,8 +130,8 @@ export default class Subject extends Component {
 		  title: <h4>确认删除<span className="alert_info">{subject.title}</span>吗?</h4>, //主标题
 			icon: <QuestionCircleOutlined />,//图标
 			content: '删除后无法恢复，请谨慎操作！',//副标题
-			okText:'确认',
-			cancelText:'取消',
+			//okText:'确认',
+			//cancelText:'取消',
 			onOk:async()=> { //弹窗中确认按钮的回调
 				//请求删除分类
 				await reqDeleteSubject(subject._id)

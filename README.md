@@ -229,7 +229,7 @@
 					1.应用骨架的国际化
 					2.应用数据的国际化	
 
-	3.实现react项目的国际化
+	3.react项目中自定义国际化
 			(1).定义语言包，并编写内容：
 							src/locales/zh_CN.json
 							src/locales/zh_TW.json
@@ -256,3 +256,14 @@
 							(2).用injectIntl加工原组件，随后将加工的结果暴露出去=====>可以考虑用装饰器
 							(2).在用到文字的地方：
 										this.props.intl.formatMessage({id:'xxxxx'})
+
+	4.react项目中antd的国际化
+			(1).引入语言包：
+						import {ConfigProvider} from 'antd'
+			(2).使用ConfigProvider包裹App
+					<ConfigProvider locale=你想用的语言包>
+						<IntlProvider messages=你想用的语言包 locale="en">
+							<App/>
+						</IntlProvider>
+					</ConfigProvider>
+			
