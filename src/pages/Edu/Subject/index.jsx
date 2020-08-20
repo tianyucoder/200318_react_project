@@ -42,6 +42,7 @@ class Subject extends Component {
 		this.setState({loading:true,pageSize,pageNumber,editId:'',editTitle:''})
 		//请求一级分类数据
 		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
+		//为了测试我们写的redux是否好用，在这里存一下分类数据
 		this.props.saveSubjectInfo(result)
 		let {total,items} = result
 		//给每一个一级分类追加chidlren属性--目的是让antd显示展开按钮
