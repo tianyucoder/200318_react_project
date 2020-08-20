@@ -1,30 +1,51 @@
 import React, { Component } from 'react'
 import {Card,Button,Form,Input,Select} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
-import {reqAllNo1Subject} from '@/api/edu/subject'
+import {reqNo1SubjectPaging,reqAddSubject} from '@/api/edu/subject'
+import './index.less'
 
 const {Item} = Form
 const {Option} = Select
+
 export default class AddSubject extends Component {
 
 	state = {
-		no1SubjectArr:[]
+		no1SubjectInfo:{total:0,items:[]},
 	}
 
-	getAllNo1Subject = async()=>{
-		const result = await reqAllNo1Subject()
-		this.setState({no1SubjectArr:result})
+	//根据页码、页大小请求数据
+	getNo1SubjectPage = async(pageNumber=1,pageSize=5)=>{
+		//从状态中获取原数据
+		const {no1SubjectInfo:{items:oldItems}} = this.state
+		//发请求获取新数据
+		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
+		const {total,items} = result
+		//更新状态
+		this.setState({
+			no1SubjectInfo:{total,items:[...oldItems,...items]}
+		})
 	}
 
 	componentDidMount(){
-		this.getAllNo1Subject()
+		this.pageNumber = 1
+		//初始化Select框中数据
+		this.getNo1SubjectPage(1,5)
 	}
 
-	handleFinish = (values)=>{
+	//表单提交的回调
+	handleFinish = async values =>{
 		console.log('你点了提交按钮，且数据校验是通过的',values);
+		await reqAddSubject(values)
+		this.props.history.replace('/edu/subject/list')
+	}
+
+	loadMore = async()=>{
+		this.pageNumber += 1
+		this.getNo1SubjectPage(this.pageNumber,5)
 	}
 
 	render() {
+		const {no1SubjectInfo} = this.state
 		return (
 			<Card 
 				title={
@@ -66,18 +87,28 @@ export default class AddSubject extends Component {
 								return (
 									<>
 										{data}
-										<hr/>
-										<Button type="link">加载更多......</Button>
+										{
+											no1SubjectInfo.total === no1SubjectInfo.items.length ? 
+											null:
+											<div>
+												<hr/>	
+												<Button type="link" onClick={this.loadMore}>
+													加载更多......
+												</Button>
+											</div>
+										}
 									</>
 								)
 							}}
 						>
 							<Option key="0" value="" >请选择父级分类</Option>
-							<Option key="1" value="0" >一级分类</Option>
+							<Option key="1" value="0" ><span className="no1title">一级分类</span></Option>
 							{
-								/* this.state.no1SubjectArr.map((subject)=>{
-								 return <Option key={subject._id} value={subject._id} >{subject.title}</Option>
-								}) */
+								no1SubjectInfo.items.map(subject =>
+									<Option key={subject._id} value={subject._id} >
+										{subject.title}
+									</Option>
+								)
 							}
 						</Select>
 					</Item>

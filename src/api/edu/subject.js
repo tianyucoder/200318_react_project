@@ -57,3 +57,15 @@ export function reqDeleteSubject(id) {
   });
 }
 
+/**
+ * 添加分类
+ * @param {*} title //分类名
+ * @param {*} parentId  //父级分类id(0代表一级分类)
+ */
+export function reqAddSubject({title,parentId}) {
+  return request({
+		url:`${BASE_URL}/save`,
+		data:{title,parentId},
+    method: "POST",
+  });
+}
