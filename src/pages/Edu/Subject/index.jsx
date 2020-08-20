@@ -36,7 +36,7 @@ export default class Subject extends Component {
 	//请求所以一级分类数据
   getNo1SubjectPaging = async (pageNumber=1,pageSize=this.state.pageSize)=>{
 		//展示loading
-		this.setState({loading:true,pageSize,pageNumber})
+		this.setState({loading:true,pageSize,pageNumber,editId:'',editTitle:''})
 		//请求一级分类数据
 		const result = await reqNo1SubjectPaging(pageNumber,pageSize)
 		let {total,items} = result
