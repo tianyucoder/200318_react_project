@@ -10,6 +10,7 @@ import {
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { login,loginSuccessSync } from "@/redux/actions/login";
+import {AUTH_BASE_URL,CLIENT_ID} from '@/config/oauth'
 import "./index.less";
 
 const { Item } = Form;
@@ -39,6 +40,11 @@ class LoginForm extends Component {
 		this.props.loginSuccessSync(loginResult) //redux中存token
 		localStorage.setItem("user_token",loginResult.token)
 		this.props.history.push('/') */
+	}
+
+	//跳转到github授权界面
+	gotoGithub = ()=>{
+		window.location.href = AUTH_BASE_URL+'?client_id='+CLIENT_ID
 	}
 
   render() {
@@ -75,7 +81,9 @@ class LoginForm extends Component {
               <Col>
                 <span>
                   第三方账号登录：
-                  <GithubOutlined className="login-icon" />
+                  <GithubOutlined className="login-icon" 
+										onClick={this.gotoGithub}
+									/>
                   <WechatOutlined className="login-icon" />
                   <QqOutlined className="login-icon" />
                 </span>

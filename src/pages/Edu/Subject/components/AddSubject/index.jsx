@@ -36,7 +36,6 @@ class AddSubject extends Component {
 
 	//表单提交的回调
 	handleFinish = async values =>{
-		console.log('你点了提交按钮，且数据校验是通过的',values);
 		await reqAddSubject(values)
 		this.props.history.replace('/edu/subject/list')
 	}
