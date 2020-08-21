@@ -22,10 +22,7 @@ export function reqLogin(username, password) {
   return request({
     url: `${BASE_URL}/login`,
     method: "post",
-    data: {
-      username,
-      password,
-    },
+    data: {username,password}
   });
 }
 

@@ -9,37 +9,44 @@ import {
 } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { login } from "@/redux/actions/login";
+import { login,loginSuccessSync } from "@/redux/actions/login";
 import "./index.less";
+import { reqLogin } from "@/api/acl/login";
 
 const { Item } = Form;
 
 @withRouter
 @connect(
 	()=>({}),//传递状态
-	{login} //传递操作状态的方法
+	{login,loginSuccessSync} //传递操作状态的方法
 )
 class LoginForm extends Component {
 
-	gotoAdmin = (token)=>{
-		localStorage.setItem("user_token", token);
-		this.props.history.replace("/");
-	}
-	
 	//点击登录按钮的回调(表单的局部校验，手动收集数据)
 	handleLogin = async()=>{
+		//获取登录表单实例
 		const {loginForm} = this.refs
+		//校验表单--返回Promise实例
 		await loginForm.validateFields(['username','password'])
+		//获取登录表单数据
 		let {username,password} = loginForm.getFieldsValue()
+		//调用异步action，传入用户名、密码，执行登录
 		let response = await this.props.login(username, password)
-		this.gotoAdmin(response)
+		localStorage.setItem("user_token", response.token);
+		this.props.history.replace("/");
+
+		/* const loginResult = await reqLogin(username,password)
+		console.log(loginResult);
+		this.props.loginSuccessSync(loginResult) //redux中存token
+		localStorage.setItem("user_token",loginResult.token)
+		this.props.history.push('/') */
 	}
 
   render() {
     return (
       <>
         <Form
-					ref="loginForm" //????
+					ref="loginForm" //用于在表单外侧获取表单实例
           className="login-form"
         >
           <Item name="username" rules={[{required:true,message:'用户名必须填写'}]}>

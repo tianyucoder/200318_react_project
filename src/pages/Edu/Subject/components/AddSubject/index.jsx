@@ -41,11 +41,7 @@ class AddSubject extends Component {
 		this.props.history.replace('/edu/subject/list')
 	}
 
-	loadMore = async()=>{
-		this.pageNumber += 1
-		this.getNo1SubjectPage(this.pageNumber,5)
-	}
-
+	//表单确定按钮的回调
 	handleClick = async()=>{
 		//获取表单实例
 		const {addSubjectForm} = this.refs
@@ -55,6 +51,12 @@ class AddSubject extends Component {
 		const values = addSubjectForm.getFieldsValue(['title','parentId'])
 		await reqAddSubject(values)
 		this.props.history.replace('/edu/subject/list')
+	}
+
+	//加载更多
+	loadMore = async()=>{
+		this.pageNumber += 1
+		this.getNo1SubjectPage(this.pageNumber,5)
 	}
 
 	render() {
