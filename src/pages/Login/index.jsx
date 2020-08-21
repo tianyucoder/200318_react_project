@@ -1,9 +1,7 @@
 import React from "react";
 import { CopyrightOutlined } from "@ant-design/icons";
-
 import logo from "@/assets/images/logo.png";
 import LoginForm from "./LoginForm";
-
 import "./index.less";
 
 export default function Login() {

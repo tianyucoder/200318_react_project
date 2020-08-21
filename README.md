@@ -254,7 +254,7 @@
 							(1).引入：
 										import {injectIntl} from 'react-intl'	
 							(2).用injectIntl加工原组件，随后将加工的结果暴露出去=====>可以考虑用装饰器
-							(2).在用到文字的地方：
+							(3).在用到文字的地方：
 										this.props.intl.formatMessage({id:'xxxxx'})
 
 	4.react项目中antd的国际化

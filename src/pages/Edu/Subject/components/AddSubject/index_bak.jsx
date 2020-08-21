@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card,Button,Form,Input,Select, message} from 'antd'
+import {Card,Button,Form,Input,Select} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
 import {reqNo1SubjectPaging,reqAddSubject} from '@/api/edu/subject'
 import {FormattedMessage,injectIntl} from 'react-intl'
@@ -46,18 +46,8 @@ class AddSubject extends Component {
 		this.getNo1SubjectPage(this.pageNumber,5)
 	}
 
-	handleClick = async()=>{
-		//获取表单实例
-		const {addSubjectForm} = this.refs
-		//1.校验数据
-		await addSubjectForm.validateFields(['title','parentId'])
-		//2.获取数据
-		const values = addSubjectForm.getFieldsValue(['title','parentId'])
-		await reqAddSubject(values)
-		this.props.history.replace('/edu/subject/list')
-	}
-
 	render() {
+		console.log(this.props);
 		const {no1SubjectInfo} = this.state
 		return (
 			<Card 
@@ -71,7 +61,7 @@ class AddSubject extends Component {
 				}
 			>
 				<Form 
-					ref="addSubjectForm"
+					onFinish={this.handleFinish} //点击提交按钮且表单校验通过后的回调
 					wrapperCol={{span:5}} //调整wrapper区
 					labelCol={{span:3}} //调整label区
 					initialValues={{parentId:'',}}//设置一些表单项的初始值
@@ -128,7 +118,7 @@ class AddSubject extends Component {
 						</Select>
 					</Item>
 					<Item  wrapperCol={{offset:3}}>
-						<Button type="primary" onClick={this.handleClick}>
+						<Button type="primary" htmlType="submit">
 							<FormattedMessage id="ok_btn"/>
 						</Button>
 					</Item>

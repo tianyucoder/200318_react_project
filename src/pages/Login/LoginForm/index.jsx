@@ -16,8 +16,8 @@ const { Item } = Form;
 
 @withRouter
 @connect(
-	()=>({}),
-	{login}
+	()=>({}),//传递状态
+	{login} //传递操作状态的方法
 )
 class LoginForm extends Component {
 
@@ -39,8 +39,7 @@ class LoginForm extends Component {
     return (
       <>
         <Form
-					ref="loginForm"
-          name="normal_login" //表单的名字(可选)
+					ref="loginForm" //????
           className="login-form"
         >
           <Item name="username" rules={[{required:true,message:'用户名必须填写'}]}>
@@ -83,4 +82,4 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+export default LoginForm
