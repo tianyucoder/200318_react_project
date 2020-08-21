@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { login,loginSuccessSync } from "@/redux/actions/login";
 import "./index.less";
-import { reqLogin } from "@/api/acl/login";
 
 const { Item } = Form;
 
@@ -31,8 +30,8 @@ class LoginForm extends Component {
 		//获取登录表单数据
 		let {username,password} = loginForm.getFieldsValue()
 		//调用异步action，传入用户名、密码，执行登录
-		let response = await this.props.login(username, password)
-		localStorage.setItem("user_token", response.token);
+		let token = await this.props.login(username, password)
+		localStorage.setItem("user_token",token);
 		this.props.history.replace("/");
 
 		/* const loginResult = await reqLogin(username,password)

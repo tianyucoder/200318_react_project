@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Card,Button,Form,Input,Select, message} from 'antd'
+import {Card,Button,Form,Input,Select} from 'antd'
 import {ArrowLeftOutlined} from '@ant-design/icons'
 import {reqNo1SubjectPaging,reqAddSubject} from '@/api/edu/subject'
 import {FormattedMessage,injectIntl} from 'react-intl'
